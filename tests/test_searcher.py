@@ -10,7 +10,7 @@ class TestSearcher(TestCase):
     strings = ['a', 'ab', 'abc', 'abcd', 'abcde']
 
     def setUp(self):
-        db = DictDatabase(CharacterNgramFeatureExtractor(2))
+        db = DictDatabase(CharacterNgramFeatureExtractor(2,be=True))
         for string in self.strings:
             db.add(string)
         self.searcher = Searcher(db, CosineMeasure())

@@ -7,4 +7,4 @@ class CharacterNgramFeatureExtractor(BaseFeatureExtractor):
         self.be = be
 
     def features(self, string):
-        return self._each_cons(SENTINAL_CHAR + string + SENTINAL_CHAR, self.n, self.be)
+        return self._each_cons(string, self.n, self.be)

@@ -3,7 +3,7 @@
 DEFAULT_NGRAM_LENGTH = 2
 
 # Whether to include marks for begins and ends of strings
-DEFAULT_INCLUDE_MARKS = False
+DEFAULT_INCLUDE_MARKS = True
 
 
 class BaseFeatureExtractor:
@@ -12,15 +12,11 @@ class BaseFeatureExtractor:
         raise NotImplementedError()
 
     def _each_cons(self, s, n, be):
-        mark = '\x01'
+        mark = " "
         src = ''
         if be:
             # affix begin/end marks
-            for i in range(n - 1):
-                src += mark
-            src += s
-            for i in range(n - 1):
-                src += mark
+            src = mark + s + mark
         elif len(s) < n:
             # pad strings shorter than n
             src = s
@@ -28,7 +24,7 @@ class BaseFeatureExtractor:
                 src += mark
         else:
             src = s
-        return [s[i:i+n] for i in range(len(s)-n+1)]
+        return [src[i:i+n] for i in range(len(src)-n+1)]
 
     def _words_ngram(self, words, n=DEFAULT_NGRAM_LENGTH, be=DEFAULT_INCLUDE_MARKS):
         """
