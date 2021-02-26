@@ -1,17 +1,17 @@
 import MeCab
 from collections import namedtuple
-from .base import BaseFeatureExtractor
+from .base import BaseFeatureExtractor, DEFAULT_NGRAM_LENGTH, DEFAULT_INCLUDE_MARKS
 
-SENTINAL_CHAR = " "  # non breaking space
 
 class MecabNgramFeatureExtractor(BaseFeatureExtractor):
-    def __init__(self, n=2, user_dic_path='', sys_dic_path=''):
+    def __init__(self, n=DEFAULT_NGRAM_LENGTH, be=DEFAULT_INCLUDE_MARKS, user_dic_path='', sys_dic_path=''):
         self.n = n
+        self.be = be
         self.mecab = MecabTokenizer(user_dic_path, sys_dic_path)
 
     def features(self, text):
         words = [x.surface() for x in self.mecab.tokenize(text)]
-        return self._words_ngram(words, self.n, SENTINAL_CHAR)
+        return self._words_ngram(words, self.n, self.be)
 
 class Token:
     def __init__(self, surface, feature):

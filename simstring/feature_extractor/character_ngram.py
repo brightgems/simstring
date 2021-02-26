@@ -1,10 +1,10 @@
-from .base import BaseFeatureExtractor
+from .base import BaseFeatureExtractor, DEFAULT_NGRAM_LENGTH, DEFAULT_INCLUDE_MARKS
 
-SENTINAL_CHAR = " "  # non breaking space
 
 class CharacterNgramFeatureExtractor(BaseFeatureExtractor):
-    def __init__(self, n=2):
+    def __init__(self,  n=DEFAULT_NGRAM_LENGTH, be=DEFAULT_INCLUDE_MARKS):
         self.n = n
+        self.be = be
 
     def features(self, string):
-        return self._each_cons(SENTINAL_CHAR + string + SENTINAL_CHAR, self.n)
+        return self._each_cons(SENTINAL_CHAR + string + SENTINAL_CHAR, self.n, self.be)
