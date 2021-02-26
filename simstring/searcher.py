@@ -11,6 +11,7 @@ class Searcher:
         self.lookup_strings_result = defaultdict(dict)
 
     def search(self, query_string, alpha):
+        
         features = self.feature_extractor.features(query_string)
         min_feature_size = self.measure.min_feature_size(len(features), alpha)
         max_feature_size = self.measure.max_feature_size(len(features), alpha)
@@ -36,17 +37,18 @@ class Searcher:
         sorted_features = sorted(features, key=lambda x: len(self.__lookup_strings_by_feature_set_size_and_feature(candidate_feature_size, x)))
         candidate_string_to_matched_count = defaultdict(int)
         results = []
-
         for feature in sorted_features[0:query_feature_size - tau + 1]:
             for s in self.__lookup_strings_by_feature_set_size_and_feature(candidate_feature_size, feature):
                 candidate_string_to_matched_count[s] += 1
+                if candidate_string_to_matched_count[s] >= tau:
+                    results.append(s)
 
         for s in candidate_string_to_matched_count.keys():
             for i in range(query_feature_size - tau + 1, query_feature_size):
                 feature = sorted_features[i]
                 if s in self.__lookup_strings_by_feature_set_size_and_feature(candidate_feature_size, feature):
                     candidate_string_to_matched_count[s] += 1
-                if candidate_string_to_matched_count[s] >= tau:
+                if candidate_string_to_matched_count[s] >= tau and s not in results:
                     results.append(s)
                     break
                 remaining_feature_count = query_feature_size - i - 1
